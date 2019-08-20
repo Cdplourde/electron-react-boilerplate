@@ -13,9 +13,9 @@
 import { app, BrowserWindow, ipcMain } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
-import MenuBuilder from './menu';
-import { configureStore } from './store/configureStore';
-import { increment, decrement } from './actions/counter';
+import { configureStore } from '../redux/store/configureStore';
+import { increment, decrement } from '../redux/actions/counter';
+import path from 'path';
 
 const store = configureStore(undefined, 'main');
 
@@ -76,8 +76,20 @@ app.on('ready', async () => {
     width: 1024,
     height: 728
   });
+  mainWindow.openDevTools();
+  mainWindow.loadURL(
+    path.resolve(path.join(__dirname), '../renderer/app.html')
+  );
 
-  mainWindow.loadURL(`file://${__dirname}/app.html`);
+  let testWindow = new BrowserWindow({
+    show: true,
+    width: 1024,
+    height: 728
+  });
+
+  testWindow.loadURL(
+    path.resolve(path.join(__dirname), '../renderer/app.html#counter')
+  );
 
   // @TODO: Use 'ready-to-show' event
   //        https://github.com/electron/electron/blob/master/docs/api/browser-window.md#using-ready-to-show-event
@@ -96,9 +108,6 @@ app.on('ready', async () => {
   mainWindow.on('closed', () => {
     mainWindow = null;
   });
-
-  const menuBuilder = new MenuBuilder(mainWindow);
-  menuBuilder.buildMenu();
 
   // Remove this if your app does not use auto updates
   // eslint-disable-next-line
@@ -123,3 +132,7 @@ ipcMain.on('store', (event, message) => {
     }
   }
 });
+
+// setInterval(() => {
+//   console.log(store.getState());
+// }, 1000);

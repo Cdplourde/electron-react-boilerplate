@@ -55,13 +55,14 @@ const configureStore = (
   };
   // If Redux DevTools Extension is installed use it, otherwise use Redux compose
   /* eslint-disable no-underscore-dangle */
-  const composeEnhancers = scope === 'renderer' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
-    ? scope === 'renderer' &&
-    window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
-      // Options: http://extension.remotedev.io/docs/API/Arguments.html
-      actionCreators
-    })
-    : compose;
+  const composeEnhancers =
+    scope === 'renderer' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
+      ? scope === 'renderer' &&
+        window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
+          // Options: http://extension.remotedev.io/docs/API/Arguments.html
+          actionCreators
+        })
+      : compose;
   /* eslint-enable no-underscore-dangle */
 
   // Apply Middleware & Compose Enhancers
